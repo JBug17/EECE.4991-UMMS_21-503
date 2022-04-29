@@ -28,10 +28,6 @@
 
 // PIC24FJ256DA210 Configuration Bit Settings
 
-// FBS
-//#pragma config BWRP = OFF     // Boot Segment Write Protect (Boot Segment may be written)
-//#pragma config BSS = NO_FLASH           // Boot Segment Program Flash Code Protection (No Boot program Flash segment)
-
 // FGS
 #pragma config GWRP = OFF               // General Code Segment Write Protect (User program memory is not write-protected)
 //#pragma config GSS = OFF                // General Segment Code Protection (User program memory is not code-protected)
@@ -41,23 +37,15 @@
 #pragma config IESO = OFF               // Internal External Switch Over Mode (Start-up device with user-selected oscillator source)
 
 // FOSC
-//#pragma config POSCMD = NONE            // Primary Oscillator Source (Primary Oscillator Disabled)
 #pragma config OSCIOFNC = ON            // OSC2 Pin Function (OSC2 pin has digital I/O function)
 #pragma config IOL1WAY = OFF            // Peripheral Pin Select Configuration (Allow Multiple Re-configurations)
 #pragma config FCKSM = CSDCMD           // Clock Switching and Monitor (Both Clock Switching and Fail-Safe Clock Monitor are disabled)
 
 // FWDT
-//#pragma config WDTPOST = PS512          // Watchdog Timer Postscaler (1:512)
-//#pragma config WDTPRE = PR128           // WDT Prescaler (1:128)
 #pragma config WINDIS = OFF             // Watchdog Timer Window (Watchdog Timer in Non-Window mode)
 #pragma config FWDTEN = OFF             // Watchdog Timer Enable (Watchdog timer enabled/disabled by user software)
 
 // FPOR
-//#pragma config FPWRT = PWR16            // POR Timer Value (16ms)
-//#pragma config ALTI2C = OFF             // Alternate I2C  pins (I2C mapped to SDA1/SCL1 pins)
-
-// FICD
-//#pragma config ICS = PGD1               // Comm Channel Select (Communicate on PGC1/EMUC1 and PGD1/EMUD1)
 #pragma config JTAGEN = OFF             // JTAG Port Enable (JTAG is Disabled)
 
 #define E  _LATA0             		//  Define the LCD Control Pins
@@ -98,56 +86,23 @@ void delay_routine(void)
 
 /******** END OF delay_routine *************************/
 
-/********************************************************
-* Function: main
-*
-* Description:  Flash RB15 on and off
-*
-* Notes:
-*
-* RB15 - 
-*
-* Returns:  This routine contains an infinite loop
-*
-********************************************************/
-
 int main()
-{
-
-    int count, x, y;
-    
+{    
     Configure_LCD_pins();
-
-    count = 0;
-    y = 0;
 
     Init_LCD();					//initialize the LCD Display
     Clear_LCD();				//clear the LCD screen
 
     while(1 == 1)              			// Loop Forever
 {
-	Clear_LCD();				// Clears the LCD screen
-
-        //itoa(XLCD_Disp2, count, 10);            // Need stdlib.h included
-
-	sprintf(XLCD_Disp2,"%d",count);
-
-        char XLCD_Disp1[] = "The count is ...";
+        char XLCD_Disp1[] = "Hemoglobin Level";
+        char XLCD_Disp2[] = "Hb: 14 g/dL     ";
 
         putsXLCD(XLCD_Disp1);			//Display string of text
         
 	LCDWrite(0b11000000, 0);    		//  Move Cursor to the Second Line
 
         putsXLCD(XLCD_Disp2);			//Display string of text
-
-        for (x = 0; x < 6600; x++);  		//  10 ms Delay Loop
-
-        y = y + 1;              		//  Increment the Counter?
-        if (25 == y)            		//  1/4 Second Passed?
-        {
-            count++;     			//  Increment the Counter
-            y = 0; 	             		//  Reset for another 1/4 Second
-        } 					// 	End if
      }						//  End while
  
 return 0;
@@ -346,5 +301,3 @@ void WriteDataXLCD(char LCDData)
     for (k = 0; k < n; k++);    		//  Delay for Character
 
 }  //  End LCD_Data_Write
-
-
